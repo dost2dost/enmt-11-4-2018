@@ -5,6 +5,8 @@ import Services.Vdate;
 import Util_Rpt.ReadExcel;
 import Util_Rpt.ReadExcelFiles;
 import Util_Rpt.ValidateTurfVendor;
+import com.aspose.cells.Cells;
+import com.aspose.cells.ImportTableOptions;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 import com.avaje.ebean.Ebean;
@@ -24,6 +26,10 @@ import play.mvc.Result;
 import play.twirl.api.Content;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,6 +40,8 @@ import play.data.Form;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+
+import static com.aspose.cells.FileFormatType.XLSX;
 
 /**
  * Created by Dost Muhammad on 3/13/2018.
@@ -53,6 +61,40 @@ public class RptController extends Controller {
 
 
 
+    public Result exportExcel() throws Exception {
+        ArrayList<FinalTemplate> lstfinal=new ArrayList<FinalTemplate>();
+        ReadExcelFiles objexcel= new ReadExcelFiles();
+        Workbook wb = new Workbook();
+
+        Worksheet worksheet = wb.getWorksheets().get(0);
+
+        Cells cells = worksheet.getCells();
+
+        try {
+            lstfinal=objexcel.GetDataFromFinalTemplate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ImportTableOptions imp = new ImportTableOptions();
+      //  imp.InsertRows = true;
+//Importing the contents of ArrayList vertically (A1:A3).
+        cells.importArrayList(lstfinal,0,0,true);
+        cells.importArrayList(lstfinal,0,0,true);
+
+//Importing the contents of ArrayList horizontally (A10:C10).
+        cells.importArrayList(lstfinal,9,0,false);
+
+        FileOutputStream fout = new FileOutputStream("D:/EXP/dm.xlsx");
+        wb.save(fout,XLSX);
+
+
+       // return ok(new FileInputStream("wb.xlx")).as("application/excel");
+      //  return ok();
+        response().setContentType("application/x-download");
+        response().setHeader("Content-disposition","attachment; filename=D:/EXP/dm.xlsx");
+        return ok().sendFile(new File("D:/EXP/dm.xlsx"));
+    }
     public Result vdateStep4() {
 
         TV obj=new TV();
