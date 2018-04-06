@@ -6,6 +6,7 @@ import com.aspose.cells.Worksheet;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import models.ExcelSheets;
 import models.FinalTemplate;
+import play.Logger;
 import play.libs.Json;
 import play.mvc.Result;
 
@@ -16,6 +17,7 @@ import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -434,15 +436,6 @@ public class ReadExcelFiles {
 
         while (rs.next()) {
 
-
-
-
-
-
-
-
-
-
             obj = new FinalTemplate();
             obj.setPaceNumber(rs.getString("PACE Number"));
             obj.setSubmittersEmail(rs.getString("Submitters E-mail"));
@@ -482,6 +475,7 @@ public class ReadExcelFiles {
     public  ArrayList<FinalTemplate> GetDateFromFinalTemplateByDate(String startDate,String endDate) throws SQLException {
 
         ArrayList<FinalTemplate> lstFinalTable= new ArrayList<FinalTemplate>();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
         Connection Conn=Connections();
         String sql="";
 
@@ -495,6 +489,7 @@ public class ReadExcelFiles {
                 "FROM public.\"_lte_data_temp\"\n" +
                 "where date between '"+startDate+"' and '"+endDate+"'";
 
+        Logger.info("Hello"+sql);
         ResultSet rs =statement.executeQuery(sql);
 
         while (rs.next()) {
