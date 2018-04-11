@@ -25,6 +25,16 @@ public class Vdate {
        return lst;
 
     }
+    public static  SqlRow records(String sql){
+
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        SqlRow row = sqlQuery.findUnique();
+
+
+
+        return row;
+
+    }
     public static  int updateStep(String sql){
         int x=0;
         String sqlfail = sql;

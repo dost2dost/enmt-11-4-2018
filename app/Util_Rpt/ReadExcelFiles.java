@@ -6,7 +6,6 @@ import com.aspose.cells.Worksheet;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import models.ExcelSheets;
 import models.FinalTemplate;
-import play.Logger;
 import play.libs.Json;
 import play.mvc.Result;
 
@@ -180,8 +179,8 @@ public class ReadExcelFiles {
 
             System.out.println(" InsertSql :" + InsertSql);
 
-            nRow=  nRow+1;
-            for (int i = nRow+1; i <= maxDataRow; i++) {
+
+            for (int i = nRow; i <= maxDataRow; i++) {
                 int row = i;
 
                 for (int j = 0; j <= maxDataColumn; j++) {
@@ -396,7 +395,7 @@ public class ReadExcelFiles {
                Statement statementAlterTbl = Conn.createStatement();
                String sqlAlterTbl = " Alter table _lte_data_temp\n" +
 
-                       " Add Column  Status  varchar(10), Add Column  Step  varchar(10)," +
+                       " Add Column  Status  varchar(100), Add Column  Step  varchar(100)," +
                        " Add Column  Date  TimeStamp";
                statementAlterTbl.execute(sqlAlterTbl);
 
@@ -436,6 +435,15 @@ public class ReadExcelFiles {
 
         while (rs.next()) {
 
+
+
+
+
+
+
+
+
+
             obj = new FinalTemplate();
             obj.setPaceNumber(rs.getString("PACE Number"));
             obj.setSubmittersEmail(rs.getString("Submitters E-mail"));
@@ -454,7 +462,7 @@ public class ReadExcelFiles {
             obj.setDate(rs.getDate("Date"));
 
 
-            System.out.println("1");
+
 
             lstFinalTable.add(obj);
 
@@ -489,7 +497,7 @@ public class ReadExcelFiles {
                 "FROM public.\"_lte_data_temp\"\n" +
                 "where date between '"+startDate+"' and '"+endDate+"'";
 
-        Logger.info("Hello"+sql);
+
         ResultSet rs =statement.executeQuery(sql);
 
         while (rs.next()) {
@@ -530,7 +538,6 @@ public class ReadExcelFiles {
 
 
     }
-
 
 
 }
